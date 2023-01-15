@@ -18,9 +18,9 @@ def d2r(a):
     return v
 
 
-def viewf(dem, spacing, nangles=72, sin_slope=None, aspect=None):
+def viewf(dem, spacing, nangles=72, sin_slope=None, aspect=None, tcf_required=False):
     """
-    Calculate the sky view factor of a dem.
+    Calculate the sky view factor of a dem. 
 
     The sky view factor from equation 7b from Dozier and Frew 1990
 
@@ -49,6 +49,7 @@ def viewf(dem, spacing, nangles=72, sin_slope=None, aspect=None):
                 Aspect as radians from south (aspect 0 is toward
                 the south) with range from -pi to pi, with negative
                 values to the west and positive values to the east.
+        tcf_required
 
     Returns:
         svf: sky view factor
@@ -102,7 +103,9 @@ def viewf(dem, spacing, nangles=72, sin_slope=None, aspect=None):
         svf[ind] = svf[ind] + intgrnd[ind]
 
     svf = svf / len(angles)
-
-    tcf = (1 + cos_slope)/2 - svf
-
+    
+    tcf = None
+    if (tcf_required):
+        tcf = (1 + cos_slope)/2 - svf
+    
     return svf, tcf
